@@ -192,3 +192,17 @@ def data_ready1(train, test, k = 300):
         testSet.append(test[i][0 : 100])
 
     return trainSet, testSet
+
+def pca(trainSet, testSet, k):
+    imsi = np.cov(trainSet.T)
+    # U, s, V = np.linalg.eig(imsi)
+    # np.linalg.eig : covariance matrix를 대상으로 명령어 수행
+    # 데이터 matrix를 대상으로 명령어 수행
+    U, s, V = np.linalg.svd(imsi)
+    
+    PC = U[:, np.argsort(s)[: : -1]][:, :k]
+
+    trainSetf = trainSet.dot(PC)
+    testSetf = testSet.dot(PC)
+
+    return trainSetf, testSetf
